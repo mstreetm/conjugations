@@ -17,9 +17,6 @@ void Verb::getVerb(){
   cout << "The infinitive of the verb is: " << infinitive << "\n";
 }
 
-
-
-
 Verb::Verb(string inf){
   infinitive = inf;
 }
