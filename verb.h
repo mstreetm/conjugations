@@ -1,9 +1,13 @@
 class Verb{
   public:
+    static std::string validTypes[3];
+
     Verb(std::string inf);
     Verb();
+
     void setVerb();
     void getVerb();
+
   private:
     std::string infinitive;
     std::string infinitiveWithoutEnding;
@@ -16,4 +20,6 @@ class Verb{
     std::string stemChange[2];
     std::string stemChangeInfinitiveWithoutEnding;
     std::string presentCongugations;
+
+    void determineVerbType();
 };
