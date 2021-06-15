@@ -10,16 +10,19 @@ class Verb{
 
   private:
     std::string infinitive;
-    std::string infinitiveWithoutEnding;
     std::string type;
-    std::string englishMeanings[6];
-    std::string englishInfinitive;
     bool isPresentRegular;
     bool isYoGo;
     bool isPresentStemChanger;
+    std::string infinitiveWithoutEnding;
+    std::string englishMeanings[6];
+    std::string englishInfinitive;
     std::string stemChange[2];
     std::string stemChangeInfinitiveWithoutEnding;
     std::string presentCongugations;
 
     void determineVerbType();
+    void getInfinitive(char tag = ' ', std::string inf = "");
+
+    std::string sanitizeInput(std::string &input);
 };

@@ -1,18 +1,14 @@
 #include <iostream>
 #include "verb.h"
 #include <string>
+#include <cctype>
 
 using namespace std;
 
 string Verb::validTypes[3] = {"ar", "er", "ir"};
 
 void Verb::setVerb(){
-  if(infinitive == ""){
-    cout << "Enter the verb infinitive: ";
-    cin >> infinitive;
-  } else{
-    cout << "The verb is already set.\n";
-  }
+  getInfinitive();
   determineVerbType();
 }
 
@@ -44,7 +40,36 @@ void Verb::determineVerbType(){
   for(auto vType : validTypes){
     cout << vType << " ";
   }
-  cout << "\nPlease enter a valid infinitive: ";
-  cin >> infinitive;
+  getInfinitive('f');
   determineVerbType();
+}
+
+string Verb::sanitizeInput(std::string &input){
+  for(auto &c : input){
+    if(isupper(c)){
+      c = tolower(c);
+    }
+  }
+  return input;
+}
+
+void Verb::getInfinitive(char tag, string inf){
+  switch(tag){
+    case ' ':
+      if(infinitive == ""){
+        cout << "Enter the verb infinitive: ";
+        cin >> infinitive;
+        infinitive = sanitizeInput(infinitive);
+      } else{
+        cout << "The verb is already set.\n";
+      }
+      break;
+    case 'f':
+      cout << "\nPlease enter a valid infinitive: ";
+      cin >> infinitive;
+      break;
+    case 'i':
+      infinitive = inf;
+  }
+  sanitizeInput(infinitive);
 }
