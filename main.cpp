@@ -4,7 +4,7 @@
 using namespace std;
 
 int main(){
-  Verb a();
+  Verb a;
   a.setVerb();
   a.getVerb();
 }
