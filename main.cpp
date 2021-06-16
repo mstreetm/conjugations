@@ -5,6 +5,7 @@ using namespace std;
 
 int main(){
   Verb a;
-  a.setVerb();
-  a.getVerb();
+  a.printHelp();
+  // a.setVerb();
+  // a.getVerb();
 }

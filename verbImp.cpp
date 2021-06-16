@@ -1,8 +1,8 @@
-#include <iostream>
-#include "verb.h"
-#include <string>
-#include <cctype>
-#include <map>
+#include <iostream> //input, output
+#include "verb.h" //class Verb
+#include <string> //string functions
+#include <cctype> //upper and lowercase things
+#include <map> //maps
 
 using namespace std;
 
@@ -24,49 +24,73 @@ map<string, string> Verb::helpText = {
 string Verb::trueInputs[2] = {"true", "yes"};
 string Verb::falseInputs[2] = {"false", "no"};
 
+Verb::ConjRules Verb::endings = {
+  .present = {
+    .ar = {"o", "as", "a", "amos", "an"},
+    .er = {"o", "es", "e", "emos", "en"},
+    .ir = {"o", "es", "e", "imos", "en"}
+  }
+};
+
 void Verb::setVerb(){
   getInfinitive();
   determineVerbType();
   setBooleans();
+  setInfinitiveWithoutEnding();
 }
 
 void Verb::getVerb(){
   cout << "infinitive: " << infinitive << "\n";
   cout << "type: " << type << "\n";
+  cout << "isReflexive: " << isReflexive << "\n";
   cout << "isPresentRegular: " << isPresentRegular << "\n";
   cout << "isYoGo: " << isYoGo << "\n";
   cout << "isPresentStemChanger: " << isPresentStemChanger << "\n";
+  cout << "presentStemChange: " << presentStemChange[0] << " " << presentStemChange[1] << "\n";
+  cout << "infinitiveWithoutEnding: " << infinitiveWithoutEnding << "\n";
+  cout << "presentStemChangeInfinitiveWithoutEnding: " << presentStemChangeInfinitiveWithoutEnding << "\n";
 }
 
 Verb::Verb(string inf){
   infinitive = inf;
   determineVerbType();
-  isPresentRegular = true;
-  isYoGo = false;
-  isPresentStemChanger = false;
+  verbSetup();
+
 }
 
 Verb::Verb(){
   infinitive = "";
   type = "";
+  verbSetup();
+}
+
+void Verb::verbSetup(){
+  isReflexive = false;
   isPresentRegular = true;
   isYoGo = false;
   isPresentStemChanger = false;
+  presentStemChange[0] = "";
+  presentStemChange[1] = "";
+  infinitiveWithoutEnding = "";
+  presentStemChangeInfinitiveWithoutEnding = "";
 }
 
 void Verb::determineVerbType(){
   type = "";
   type += infinitive[infinitive.length()-2];
   type += infinitive[infinitive.length()-1];
+  if(type == "se"){
+    isReflexive = true;
+    type = "";
+    type += infinitive[infinitive.length()-4];
+    type += infinitive[infinitive.length()-3];
+  }
   for(auto vType : validTypes){
     if(type == vType){
       return;
     }
   }
-  cout << infinitive << " is not a valid infinitive.  The infinitive must end in ";
-  for(auto vType : validTypes){
-    cout << vType << " ";
-  }
+  isReflexive = false;
   getInfinitive('f');
   determineVerbType();
 }
@@ -92,6 +116,10 @@ void Verb::getInfinitive(char tag, string inf){
       }
       break;
     case 'f':
+      cout << infinitive << " is not a valid infinitive.  The infinitive must end in ";
+      for(auto vType : validTypes){
+        cout << vType << " ";
+      }
       cout << "\nPlease enter a valid infinitive: ";
       cin >> infinitive;
       break;
@@ -106,9 +134,15 @@ void Verb::setBooleans(){
   isPresentRegular = booleanInput("isPresentRegular");
   if(!isPresentRegular){
     isYoGo = booleanInput("isYoGo");
-    if(!isYoGo){
-      isPresentStemChanger = booleanInput("isPresentStemChanger");
-    }
+    isPresentStemChanger = booleanInput("isPresentStemChanger");
+    setPresentStemChange();
+  }
+}
+
+void Verb::setPresentStemChange(){
+  if(isPresentStemChanger){
+    cout << "PLease enter the stem change in this form: \"e ie\": ";
+    cin >> presentStemChange[0] >> presentStemChange[1];
   }
 }
 
@@ -133,4 +167,31 @@ bool Verb::booleanInput(string key){
     cout << helpText["genericBool"];
   }
   return booleanInput(key);
+}
+
+void Verb::setInfinitiveWithoutEnding(){
+  if(isPresentRegular || isYoGo || isPresentStemChanger){
+    infinitiveWithoutEnding = infinitive;
+    infinitiveWithoutEnding.pop_back();
+    infinitiveWithoutEnding.pop_back();
+    setPresentStemChangeInfinitiveWithoutEnding();
+  }
+}
+
+void Verb::setPresentStemChangeInfinitiveWithoutEnding(){
+  if(isPresentStemChanger){
+    int len = infinitiveWithoutEnding.length();
+    for(int i = len-1; i >= 0; i--){
+      if(infinitiveWithoutEnding[i] == presentStemChange[0][0]){
+        for(int j = 0; j < i; j++){
+          presentStemChangeInfinitiveWithoutEnding += infinitiveWithoutEnding[j];
+        }
+        presentStemChangeInfinitiveWithoutEnding += presentStemChange[1];
+        for(int j = i+1; j < len; j++){
+          presentStemChangeInfinitiveWithoutEnding += infinitiveWithoutEnding[j];
+        }
+        break;
+      }
+    }
+  }
 }
