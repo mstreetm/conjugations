@@ -32,6 +32,11 @@ Verb::ConjRules Verb::endings = {
   }
 };
 
+Verb::Pronouns Verb::pronouns = {
+  .spanish = {"yo", "tu", "el/ella/usted", "nosotros", "ellos/ellas"},
+  .english = {"i", "you", "he/she", "we", "they"}
+};
+
 void Verb::setVerb(){
   getInfinitive();
   determineVerbType();

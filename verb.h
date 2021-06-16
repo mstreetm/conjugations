@@ -7,7 +7,6 @@ class Verb{
 
     void setVerb();
     void getVerb();
-    void printHelp();
 
   private:
     struct ConjRules{
@@ -19,12 +18,18 @@ class Verb{
       PresentTense present;
     };
 
+    struct Pronouns{
+      std::string spanish[5];
+      std::string english[5];
+    };
+
     static std::string validTypes[3];
     static std::map<std::string, std::string> standardText;
     static std::map<std::string, std::string> helpText;
     static std::string trueInputs[2];
     static std::string falseInputs[2];
     static ConjRules endings;
+    static Pronouns pronouns;
 
     std::string infinitive;
     std::string type;
@@ -45,6 +50,8 @@ class Verb{
     void setPresentStemChange();
     void setInfinitiveWithoutEnding();
     void setPresentStemChangeInfinitiveWithoutEnding();
+
+    void verbSetup();
 
     std::string sanitizeInput(std::string &input);
     bool booleanInput(std::string key);
