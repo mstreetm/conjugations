@@ -60,7 +60,6 @@ Verb::Verb(string inf){
   infinitive = inf;
   determineVerbType();
   verbSetup();
-
 }
 
 Verb::Verb(){
@@ -90,17 +89,20 @@ void Verb::determineVerbType(){
     type += infinitive[infinitive.length()-4];
     type += infinitive[infinitive.length()-3];
   }
+  //if the verb type is valid, exit the function
   for(auto vType : validTypes){
     if(type == vType){
       return;
     }
   }
+  //else, re-promt for the infinitive, and call self again
   isReflexive = false;
   getInfinitive('f');
   determineVerbType();
 }
 
-string Verb::sanitizeInput(std::string &input){
+string Verb::sanitizeInput(std::string input){
+  // sets all uppercase characters in a string to lowercase
   for(auto &c : input){
     if(isupper(c)){
       c = tolower(c);
@@ -110,8 +112,9 @@ string Verb::sanitizeInput(std::string &input){
 }
 
 void Verb::getInfinitive(char tag, string inf){
+  // tag defaults to " ", while inf defaults to ""
   switch(tag){
-    case ' ':
+    case ' ':// normal use
       if(infinitive == ""){
         cout << "Enter the verb infinitive: ";
         cin >> infinitive;
@@ -120,7 +123,7 @@ void Verb::getInfinitive(char tag, string inf){
         cout << "The verb is already set.\n";
       }
       break;
-    case 'f':
+    case 'f':// force(invalid type)
       cout << infinitive << " is not a valid infinitive.  The infinitive must end in ";
       for(auto vType : validTypes){
         cout << vType << " ";
@@ -128,11 +131,11 @@ void Verb::getInfinitive(char tag, string inf){
       cout << "\nPlease enter a valid infinitive: ";
       cin >> infinitive;
       break;
-    case 'i':
+    case 'i'://initial
       infinitive = inf;
       break;
   }
-  sanitizeInput(infinitive);
+  infinitive = sanitizeInput(infinitive);
 }
 
 void Verb::setBooleans(){
@@ -156,12 +159,12 @@ bool Verb::booleanInput(string key){
   string input;
   cin >> input;
   input = sanitizeInput(input);
-  for(auto a : falseInputs){
+  for(auto a : falseInputs){//checks against false inputs
     if(a == input){
       return false;
     }
   }
-  for(auto a : trueInputs){
+  for(auto a : trueInputs){//checks against true inputs
     if(a == input){
       return true;
     }
@@ -179,6 +182,10 @@ void Verb::setInfinitiveWithoutEnding(){
     infinitiveWithoutEnding = infinitive;
     infinitiveWithoutEnding.pop_back();
     infinitiveWithoutEnding.pop_back();
+    if(isReflexive){
+      infinitiveWithoutEnding.pop_back();
+      infinitiveWithoutEnding.pop_back();
+    }
     setPresentStemChangeInfinitiveWithoutEnding();
   }
 }
@@ -186,14 +193,14 @@ void Verb::setInfinitiveWithoutEnding(){
 void Verb::setPresentStemChangeInfinitiveWithoutEnding(){
   if(isPresentStemChanger){
     int len = infinitiveWithoutEnding.length();
-    for(int i = len-1; i >= 0; i--){
+    for(int i = len-1; i >= 0; i--){//iterates back to front to find the last spot with the thing to change
       if(infinitiveWithoutEnding[i] == presentStemChange[0][0]){
         for(int j = 0; j < i; j++){
-          presentStemChangeInfinitiveWithoutEnding += infinitiveWithoutEnding[j];
+          presentStemChangeInfinitiveWithoutEnding += infinitiveWithoutEnding[j];//puts the first part of the PSCIWE in
         }
-        presentStemChangeInfinitiveWithoutEnding += presentStemChange[1];
+        presentStemChangeInfinitiveWithoutEnding += presentStemChange[1];//puts in the stem change
         for(int j = i+1; j < len; j++){
-          presentStemChangeInfinitiveWithoutEnding += infinitiveWithoutEnding[j];
+          presentStemChangeInfinitiveWithoutEnding += infinitiveWithoutEnding[j];//fills in the end of the PSCIWE
         }
         break;
       }
