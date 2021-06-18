@@ -42,7 +42,7 @@ void Verb::setVerb(){
   setEnglishInfinitive();
   determineVerbType();
   setBooleans();
-  setInfinitiveWithoutEnding();
+  setStem();
 }
 
 void Verb::getVerb(){
@@ -54,8 +54,8 @@ void Verb::getVerb(){
   cout << "isYoGo: " << isYoGo << "\n";
   cout << "isPresentStemChanger: " << isPresentStemChanger << "\n";
   cout << "presentStemChange: " << presentStemChange[0] << " " << presentStemChange[1] << "\n";
-  cout << "infinitiveWithoutEnding: " << infinitiveWithoutEnding << "\n";
-  cout << "presentStemChangeInfinitiveWithoutEnding: " << presentStemChangeInfinitiveWithoutEnding << "\n";
+  cout << "stem: " << stem << "\n";
+  cout << "presentStemChangeStem: " << presentStemChangeStem << "\n";
 }
 
 Verb::Verb(string inf){
@@ -77,8 +77,8 @@ void Verb::verbSetup(){
   isPresentStemChanger = false;
   presentStemChange[0] = "";
   presentStemChange[1] = "";
-  infinitiveWithoutEnding = "";
-  presentStemChangeInfinitiveWithoutEnding = "";
+  stem = "";
+  presentStemChangeStem = "";
 }
 
 void Verb::determineVerbType(){
@@ -179,30 +179,30 @@ bool Verb::booleanInput(string key){
   return booleanInput(key);
 }
 
-void Verb::setInfinitiveWithoutEnding(){
+void Verb::setStem(){
   if(isPresentRegular || isYoGo || isPresentStemChanger){
-    infinitiveWithoutEnding = infinitive;
-    infinitiveWithoutEnding.pop_back();
-    infinitiveWithoutEnding.pop_back();
+    stem = infinitive;
+    stem.pop_back();
+    stem.pop_back();
     if(isReflexive){
-      infinitiveWithoutEnding.pop_back();
-      infinitiveWithoutEnding.pop_back();
+      stem.pop_back();
+      stem.pop_back();
     }
-    setPresentStemChangeInfinitiveWithoutEnding();
+    setPresentStemChangeStem();
   }
 }
 
-void Verb::setPresentStemChangeInfinitiveWithoutEnding(){
+void Verb::setPresentStemChangeStem(){
   if(isPresentStemChanger){
-    int len = infinitiveWithoutEnding.length();
+    int len = stem.length();
     for(int i = len-1; i >= 0; i--){//iterates back to front to find the last spot with the thing to change
-      if(infinitiveWithoutEnding[i] == presentStemChange[0][0]){
+      if(stem[i] == presentStemChange[0][0]){
         for(int j = 0; j < i; j++){
-          presentStemChangeInfinitiveWithoutEnding += infinitiveWithoutEnding[j];//puts the first part of the PSCIWE in
+          presentStemChangeStem += stem[j];//puts the first part of the PSCS in
         }
-        presentStemChangeInfinitiveWithoutEnding += presentStemChange[1];//puts in the stem change
+        presentStemChangeStem += presentStemChange[1];//puts in the stem change
         for(int j = i+1; j < len; j++){
-          presentStemChangeInfinitiveWithoutEnding += infinitiveWithoutEnding[j];//fills in the end of the PSCIWE
+          presentStemChangeStem += stem[j];//fills in the end of the PSCS
         }
         break;
       }

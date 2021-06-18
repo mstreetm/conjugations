@@ -43,16 +43,16 @@ class Verb{
     bool isYoGo;// is teh verb a yo-go verb
     bool isPresentStemChanger;// is the verb a stem changer in the present tense
     std::string presentStemChange[2];// what is the change in the form "e ie"
-    std::string infinitiveWithoutEnding;// the infinitive without the last 2(or 4 for reflexive) letters
-    std::string presentStemChangeInfinitiveWithoutEnding;// the above with the stem change
+    std::string stem;// the infinitive without the last 2(or 4 for reflexive) letters
+    std::string presentStemChangeStem;// the above with the stem change
     std::string presentCongugations[5];// the spanish, present tense conjugations of the verb
 
     void determineVerbType();// determines the type ex "ar" of the verb and sets isReflexive
     void getInfinitive(char tag = ' ', std::string inf = "");// prompts the user for the verb infinitive, validates it, and re-prompts if nesecary
     void setBooleans();// sets the boolean type properties by prompting the user
     void setPresentStemChange();// sets the presentStemChange if the verb is a present stem changer by prompting the user
-    void setInfinitiveWithoutEnding();// sets the infinitiveWithoutEnding
-    void setPresentStemChangeInfinitiveWithoutEnding();// sets the presentStemChangeInfinitiveWithoutEnding if nesecary
+    void setStem();// sets the stem
+    void setPresentStemChangeStem();// sets the presentStemChangeStem if nesecary
     void setEnglishInfinitive();// sets the english meaning ex "eat" for comer not to eat, the to would be removed;
 
     void verbSetup();// used for constructors, sets most properties to "" or false, while setting isPresentRegular to true;
