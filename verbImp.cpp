@@ -39,6 +39,7 @@ Verb::Pronouns Verb::pronouns = {
 
 void Verb::setVerb(){
   getInfinitive();
+  setEnglishInfinitive();
   determineVerbType();
   setBooleans();
   setInfinitiveWithoutEnding();
@@ -46,6 +47,7 @@ void Verb::setVerb(){
 
 void Verb::getVerb(){
   cout << "infinitive: " << infinitive << "\n";
+  cout << "englishInfinitive: " << englishInfinitive << "\n";
   cout << "type: " << type << "\n";
   cout << "isReflexive: " << isReflexive << "\n";
   cout << "isPresentRegular: " << isPresentRegular << "\n";
@@ -206,4 +208,14 @@ void Verb::setPresentStemChangeInfinitiveWithoutEnding(){
       }
     }
   }
+}
+
+void Verb::setEnglishInfinitive(){
+  cout << "Enter the meaning of " << infinitive << ": ";
+  cin >> englishInfinitive;
+  englishInfinitive = sanitizeInput(englishInfinitive);
+  if(englishInfinitive == "to"){
+    cin >> englishInfinitive;
+  }
+  englishInfinitive = sanitizeInput(englishInfinitive);
 }
