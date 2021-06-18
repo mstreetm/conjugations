@@ -11,14 +11,16 @@ string Verb::validTypes[3] = {"ar", "er", "ir"};
 map<string, string> Verb::standardText = {
   {"isPresentRegular", "Is the verb regular in the present tense: "},
   {"isYoGo", "Is the verb a yo-go verb: "},
-  {"isPresentStemChanger", "Does the verb undergo a stem change in the present tense: "}
+  {"isPresentStemChanger", "Does the verb undergo a stem change in the present tense: "},
+  {"correctYoGo", "Is this the correct yo form of the verb: "}
 };
 
 map<string, string> Verb::helpText = {
   {"isPresentRegular", "Is the verb conjugated regularly in the present tense?\n"},
   {"genericBool", "Please enter true, yes, false, no, or help.\n"},
   {"isYoGo", "Does the present tense yo form of the verb end in \"go\"?\n"},
-  {"isPresentStemChanger", "Does the verb stem change for all of the present tense conjugations(other than nosotros)?\n: "}
+  {"isPresentStemChanger", "Does the verb stem change for all of the present tense conjugations(other than nosotros)?\n"},
+  {"correctYoGo", "Should the yo form of this verb have the third-to-last letter removed?\n"}
 };
 
 string Verb::trueInputs[2] = {"true", "yes"};
@@ -194,7 +196,7 @@ void Verb::setStem(){
     stem = infinitive;
     stem.pop_back();
     stem.pop_back();
-    if(isReflexive){
+    if(isReflexive){// actually remove the stem(first removed the "se")
       stem.pop_back();
       stem.pop_back();
     }
@@ -224,32 +226,39 @@ void Verb::setEnglishInfinitive(){
   cout << "Enter the meaning of " << infinitive << ": ";
   cin >> englishInfinitive;
   englishInfinitive = sanitizeInput(englishInfinitive);
-  if(englishInfinitive == "to"){
+  if(englishInfinitive == "to"){// removes the "to" if it is included
     cin >> englishInfinitive;
   }
   englishInfinitive = sanitizeInput(englishInfinitive);
 }
 
 void Verb::setPresentConjugations(){
-  if(!isPresentRegular && !isPresentStemChanger && !isYoGo){
+  if(!isPresentRegular && !isPresentStemChanger && !isYoGo){// if the verb is completley irregular
     for(int i = 0; i < 5; i++){
       cout << "enter the " << pronouns.spanish[i] << " conjugation of " << infinitive << ": ";
       cin >> presentCongugations[i];
     }
     return;
   }
-  for(int i = 0; i < 5; i++){
+  for(int i = 0; i < 5; i++){// if the verb is somewhat regular
     string currentConjugation = "";
-    if(isPresentStemChanger && (i != 3)){
+    if(isPresentStemChanger && (i != 3)){// if the verb is a stem changer
       currentConjugation = presentStemChangeStem;
-      if(isYoGo && (i == 0)){
-        presentCongugations[i] = currentConjugation + "go";
-        continue;
-      }
-    }else{
+    }else{// if not
       currentConjugation = stem;
     }
-    switch(type){
+    if(isYoGo && (i == 0)){// if the verb is a yo-go
+      presentCongugations[i] = currentConjugation + "go";
+      cout << presentCongugations[i] << ": ";
+      bool correct = booleanInput("correctYoGo");
+      if(!correct){
+        presentCongugations[i] = currentConjugation;
+        presentCongugations[i].pop_back();
+        presentCongugations[i] += "go";
+      }
+      continue;
+    }
+    switch(type){//if not or a different form
       case 'a':
         currentConjugation += endings.present.ar[i];
         break;
