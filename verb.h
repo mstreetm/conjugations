@@ -29,8 +29,8 @@ class Verb{
     static std::string validTypes[3];// valid types of verb ex. "ar"
     static std::map<std::string, std::string> standardText;// the standard prompt text for setVerb();
     static std::map<std::string, std::string> helpText;// the help text for setVerb();
-    static std::string trueInputs[2];// strings that should evaluate as true (for booleans)
-    static std::string falseInputs[2];// strings that should evaluate as false (for booleans)
+    static std::string trueInputs[3];// strings that should evaluate as true (for booleans)
+    static std::string falseInputs[3];// strings that should evaluate as false (for booleans)
     static ConjRules endings;// the verb endings
     static Pronouns pronouns;// the pronouns
 

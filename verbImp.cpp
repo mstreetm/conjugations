@@ -23,8 +23,8 @@ map<string, string> Verb::helpText = {
   {"correctYoGo", "Should the yo form of this verb have the third-to-last letter removed?\n"}
 };
 
-string Verb::trueInputs[2] = {"true", "yes"};
-string Verb::falseInputs[2] = {"false", "no"};
+string Verb::trueInputs[3] = {"true", "yes", "1"};
+string Verb::falseInputs[3] = {"false", "no", "0"};
 
 Verb::ConjRules Verb::endings = {
   .present = {
