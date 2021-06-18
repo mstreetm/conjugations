@@ -43,6 +43,7 @@ void Verb::setVerb(){
   determineVerbType();
   setBooleans();
   setStem();
+  setPresentConjugations();
 }
 
 void Verb::getVerb(){
@@ -56,6 +57,11 @@ void Verb::getVerb(){
   cout << "presentStemChange: " << presentStemChange[0] << " " << presentStemChange[1] << "\n";
   cout << "stem: " << stem << "\n";
   cout << "presentStemChangeStem: " << presentStemChangeStem << "\n";
+  cout << "presentCongugations:";
+  for(auto c : presentCongugations){
+    cout << " " << c;
+  }
+  cout << "\n";
 }
 
 Verb::Verb(string inf){
@@ -66,11 +72,11 @@ Verb::Verb(string inf){
 
 Verb::Verb(){
   infinitive = "";
-  type = "";
   verbSetup();
 }
 
 void Verb::verbSetup(){
+  englishInfinitive = "";
   isReflexive = false;
   isPresentRegular = true;
   isYoGo = false;
@@ -79,21 +85,25 @@ void Verb::verbSetup(){
   presentStemChange[1] = "";
   stem = "";
   presentStemChangeStem = "";
+  for(auto &c : presentCongugations){
+    c = "";
+  }
 }
 
 void Verb::determineVerbType(){
-  type = "";
-  type += infinitive[infinitive.length()-2];
-  type += infinitive[infinitive.length()-1];
-  if(type == "se"){
+  string sType = "";
+  sType += infinitive[infinitive.length()-2];
+  sType += infinitive[infinitive.length()-1];
+  if(sType == "se"){
     isReflexive = true;
-    type = "";
-    type += infinitive[infinitive.length()-4];
-    type += infinitive[infinitive.length()-3];
+    sType = "";
+    sType += infinitive[infinitive.length()-4];
+    sType += infinitive[infinitive.length()-3];
   }
   //if the verb type is valid, exit the function
   for(auto vType : validTypes){
-    if(type == vType){
+    if(sType == vType){
+      type = sType[0];
       return;
     }
   }
@@ -218,4 +228,38 @@ void Verb::setEnglishInfinitive(){
     cin >> englishInfinitive;
   }
   englishInfinitive = sanitizeInput(englishInfinitive);
+}
+
+void Verb::setPresentConjugations(){
+  if(!isPresentRegular && !isPresentStemChanger && !isYoGo){
+    for(int i = 0; i < 5; i++){
+      cout << "enter the " << pronouns.spanish[i] << " conjugation of " << infinitive << ": ";
+      cin >> presentCongugations[i];
+    }
+    return;
+  }
+  for(int i = 0; i < 5; i++){
+    string currentConjugation = "";
+    if(isPresentStemChanger && (i != 3)){
+      currentConjugation = presentStemChangeStem;
+      if(isYoGo && (i == 0)){
+        presentCongugations[i] = currentConjugation + "go";
+        continue;
+      }
+    }else{
+      currentConjugation = stem;
+    }
+    switch(type){
+      case 'a':
+        currentConjugation += endings.present.ar[i];
+        break;
+      case 'e':
+        currentConjugation += endings.present.er[i];
+        break;
+      case 'i':
+        currentConjugation += endings.present.ir[i];
+        break;
+    }
+    presentCongugations[i] = currentConjugation;
+  }
 }
