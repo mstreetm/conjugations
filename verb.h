@@ -3,9 +3,12 @@
 
 class Verb{
   public:
+    static std::ifstream fin;//the file input
+
     // constructors, all call vrebSteup()
     Verb(std::string inf);// constructor including the verb infinitive
     Verb(); //default constructor
+    Verb(const Verb& a);// for copying
 
     void setVerb();// sets verb properties by user prompt for the most part
     void getVerb();// prints verb properties and labels
@@ -31,7 +34,6 @@ class Verb{
 
     static std::string verbFile;// the file to input/output the verbs to
 
-    static std::ifstream fin;
     static std::ofstream fout;//the file output;
 
     static std::string validTypes[3];// valid types of verb ex. "ar"

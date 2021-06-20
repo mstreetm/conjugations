@@ -130,6 +130,23 @@ Verb::Verb(){
   verbSetup();
 }
 
+Verb::Verb(const Verb& a){
+  infinitive = a.infinitive;
+  englishInfinitive = a.englishInfinitive;
+  type = a.type;
+  isReflexive = a.isReflexive;
+  isPresentRegular = a.isPresentRegular;
+  isYoGo = a.isYoGo;
+  isPresentStemChanger = a.isPresentStemChanger;
+  presentStemChange[0] = a.presentStemChange[0];
+  presentStemChange[1] = a.presentStemChange[1];
+  stem = a.stem;
+  presentStemChangeStem = a.presentStemChangeStem;
+  for(int i = 0; i < 5; i++){
+    presentCongugations[i] = a.presentCongugations[i];
+  }
+}
+
 void Verb::verbSetup(){
   englishInfinitive = "";
   isReflexive = false;
