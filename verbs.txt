@@ -1,0 +1,2 @@
+jugar play a 0 0 0 1 u ue jug jueg juego juegas juega jugamos juegan 
+caminar walk a 0 1 camin camino caminas camina caminamos caminan 

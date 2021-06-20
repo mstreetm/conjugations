@@ -10,6 +10,7 @@ class Verb{
     void setVerb();// sets verb properties by user prompt for the most part
     void getVerb();// prints verb properties and labels
     void outputVerb();// outputs the verb to the text file
+    void inputVerb();//inputs a verb from the text file
 
   private:
     // for verb endings
@@ -28,8 +29,9 @@ class Verb{
       std::string english[5];
     };
 
-    static std::string outputFile;// the file to output the verbs to
+    static std::string verbFile;// the file to input/output the verbs to
 
+    static std::ifstream fin;
     static std::ofstream fout;//the file output;
 
     static std::string validTypes[3];// valid types of verb ex. "ar"
@@ -46,7 +48,7 @@ class Verb{
     char type;// signifies the type of verb ex. "ar" but stores the first letter ex. 'a'
     bool isReflexive;// is the verb reflexive? (does it end in "se")
     bool isPresentRegular;// is the verb regular in the present tense
-    bool isYoGo;// is teh verb a yo-go verb
+    bool isYoGo;// is the verb a yo-go verb
     bool isPresentStemChanger;// is the verb a stem changer in the present tense
     std::string presentStemChange[2];// what is the change in the form "e ie"
     std::string stem;// the infinitive without the last 2(or 4 for reflexive) letters

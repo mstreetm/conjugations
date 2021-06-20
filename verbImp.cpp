@@ -7,9 +7,10 @@
 
 using namespace std;
 
-string Verb::outputFile = "verbs.txt";
+string Verb::verbFile = "verbs.txt";
 
-ofstream Verb::fout(outputFile);
+ifstream Verb::fin(verbFile);
+ofstream Verb::fout(verbFile, ios::app);
 
 string Verb::validTypes[3] = {"ar", "er", "ir"};
 
@@ -72,7 +73,50 @@ void Verb::getVerb(){
 }
 
 void Verb::outputVerb(){
+  fout << infinitive << " ";
+  fout << englishInfinitive << " ";
+  fout << type << " ";
+  fout << isReflexive << " ";
+  fout << isPresentRegular << " ";
+  if(!isPresentRegular){
+    fout << isYoGo << " ";
+    fout << isPresentStemChanger << " ";
+    if(isPresentStemChanger){
+      fout << presentStemChange[0] << " ";
+      fout << presentStemChange[1] << " ";
+    }
+  }
+  fout << stem << " ";
+  if(isPresentStemChanger){
+    fout << presentStemChangeStem << " ";
+  }
+  for(auto c : presentCongugations){
+    fout << c << " ";
+  }
+  fout << "\n";
+}
 
+void Verb::inputVerb(){
+  fin >> infinitive;
+  fin >> englishInfinitive;
+  fin >> type;
+  fin >> isReflexive;
+  fin >> isPresentRegular;
+  if(!isPresentRegular){
+    fin >> isYoGo;
+    fin >> isPresentStemChanger;
+    if(isPresentStemChanger){
+      fin >> presentStemChange[0];
+      fin >> presentStemChange[1];
+    }
+  }
+  fin >> stem;
+  if(isPresentStemChanger){
+    fin >> presentStemChangeStem;
+  }
+  for(auto &c : presentCongugations){
+    fin >> c;
+  }
 }
 
 Verb::Verb(string inf){
