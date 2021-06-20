@@ -1,4 +1,5 @@
 #include <map>// std::maps
+#include <fstream>//ifstream, ofstream
 
 class Verb{
   public:
@@ -8,6 +9,7 @@ class Verb{
 
     void setVerb();// sets verb properties by user prompt for the most part
     void getVerb();// prints verb properties and labels
+    void outputVerb();// outputs the verb to the text file
 
   private:
     // for verb endings
@@ -25,6 +27,10 @@ class Verb{
       std::string spanish[5];
       std::string english[5];
     };
+
+    static std::string outputFile;// the file to output the verbs to
+
+    static std::ofstream fout;//the file output;
 
     static std::string validTypes[3];// valid types of verb ex. "ar"
     static std::map<std::string, std::string> standardText;// the standard prompt text for setVerb();

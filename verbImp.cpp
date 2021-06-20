@@ -3,8 +3,13 @@
 #include <string> //string functions
 #include <cctype> //upper and lowercase things
 #include <map> //maps
+#include <iostream>// ifstream, ofstream
 
 using namespace std;
+
+string Verb::outputFile = "verbs.txt";
+
+ofstream Verb::fout(outputFile);
 
 string Verb::validTypes[3] = {"ar", "er", "ir"};
 
@@ -64,6 +69,10 @@ void Verb::getVerb(){
     cout << " " << c;
   }
   cout << "\n";
+}
+
+void Verb::outputVerb(){
+
 }
 
 Verb::Verb(string inf){
