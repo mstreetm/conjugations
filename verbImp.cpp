@@ -46,9 +46,9 @@ Verb::Pronouns Verb::pronouns = {
 };
 
 void Verb::setVerb(){
-  getInfinitive();
+  setInfinitive();
   setEnglishInfinitive();
-  determineVerbType();
+  setVerbType();
   setBooleans();
   setStem();
   setPresentConjugations();
@@ -121,7 +121,7 @@ void Verb::inputVerb(){
 
 Verb::Verb(string inf){
   infinitive = inf;
-  determineVerbType();
+  setVerbType();
   verbSetup();
 }
 
@@ -162,7 +162,7 @@ void Verb::verbSetup(){
   }
 }
 
-void Verb::determineVerbType(){
+void Verb::setVerbType(){
   string sType = "";
   sType += infinitive[infinitive.length()-2];
   sType += infinitive[infinitive.length()-1];
@@ -181,8 +181,8 @@ void Verb::determineVerbType(){
   }
   //else, re-promt for the infinitive, and call self again
   isReflexive = false;
-  getInfinitive('f');
-  determineVerbType();
+  setInfinitive('f');
+  setVerbType();
 }
 
 string Verb::sanitizeInput(std::string input){
@@ -195,7 +195,7 @@ string Verb::sanitizeInput(std::string input){
   return input;
 }
 
-void Verb::getInfinitive(char tag, string inf){
+void Verb::setInfinitive(char tag, string inf){
   // tag defaults to " ", while inf defaults to ""
   switch(tag){
     case ' ':// normal use
@@ -341,4 +341,12 @@ void Verb::setPresentConjugations(){
     }
     presentCongugations[i] = currentConjugation;
   }
+}
+
+std::string Verb::getInfinitive(){
+  return infinitive;
+};
+
+std::string Verb::getPresentConjugation(int conNum){
+  return presentCongugations[conNum];
 }

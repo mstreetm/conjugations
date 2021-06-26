@@ -15,6 +15,17 @@ class Verb{
     void outputVerb();// outputs the verb to the text file
     void inputVerb();//inputs a verb from the text file
 
+    std::string getInfinitive();// returns the verb infinitive
+    std::string getPresentConjugation(int conNum);// returns the specified present conjugation
+
+    //for pronouns ex. yo, I, etc.
+    struct Pronouns{
+      std::string spanish[5];
+      std::string english[5];
+    };
+
+    static Pronouns pronouns;// the pronouns
+
   private:
     // for verb endings
     struct ConjRules{
@@ -24,12 +35,6 @@ class Verb{
         std::string ir[5];
       };
       PresentTense present;
-    };
-
-    //for pronouns ex. yo, I, etc.
-    struct Pronouns{
-      std::string spanish[5];
-      std::string english[5];
     };
 
     static std::string verbFile;// the file to input/output the verbs to
@@ -42,7 +47,6 @@ class Verb{
     static std::string trueInputs[3];// strings that should evaluate as true (for booleans)
     static std::string falseInputs[3];// strings that should evaluate as false (for booleans)
     static ConjRules endings;// the verb endings
-    static Pronouns pronouns;// the pronouns
 
     // verb properties
     std::string infinitive;// the verb infinitive
@@ -57,8 +61,8 @@ class Verb{
     std::string presentStemChangeStem;// the above with the stem change
     std::string presentCongugations[5];// the spanish, present tense conjugations of the verb
 
-    void determineVerbType();// determines the type ex "ar"(sets 'a') of the verb and sets isReflexive
-    void getInfinitive(char tag = ' ', std::string inf = "");// prompts the user for the verb infinitive, validates it, and re-prompts if nesecary
+    void setVerbType();// sets the type ex "ar"(sets 'a') of the verb and sets isReflexive
+    void setInfinitive(char tag = ' ', std::string inf = "");// prompts the user for the verb infinitive, validates it, and re-prompts if nesecary
     void setBooleans();// sets the boolean type properties by prompting the user
     void setPresentStemChange();// sets the presentStemChange if the verb is a present stem changer by prompting the user
     void setStem();// sets the stem
