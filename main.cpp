@@ -1,8 +1,9 @@
-#include <iostream>
-#include "verb.h"
-#include <vector>
-#include <stdlib.h>
-#include <time.h>
+#include <iostream>// input/output
+#include "verb.h"// Verb
+#include <vector>//vectors
+#include <stdlib.h>//rand, srand
+#include <time.h>//time for random seeding
+#include <cctype>//upper and lowercase things
 
 using namespace std;
 
@@ -48,6 +49,16 @@ void promptVerb(){
       cin >> answer;
       answer = sanitizeInput(answer);
     }
+  }
+  cout << "Correct! Try again? (y/n): ";
+  char ans;
+  cin >> ans;
+  while((ans != 'y') && (ans != 'n')){
+    cout << "Please enter y or n: ";
+    cin >> ans;
+  }
+  if(ans == 'y'){
+    promptVerb();
   }
 }
 
