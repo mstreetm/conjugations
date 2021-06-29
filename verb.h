@@ -10,7 +10,7 @@ class Verb{
     Verb(); //default constructor
     Verb(const Verb& a);// for copying
 
-    void setVerb();// sets verb properties by user prompt for the most part
+    void setVerb();// sets verb properties by user prompt for the most part, also calls outputVerb
     void getVerb();// prints verb properties and labels
     void outputVerb();// outputs the verb to the text file
     void inputVerb();//inputs a verb from the text file

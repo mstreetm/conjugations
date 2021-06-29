@@ -1,2 +1,5 @@
-jugar play a 0 0 0 1 u ue jug jueg juego juegas juega jugamos juegan 
-caminar walk a 0 1 camin camino caminas camina caminamos caminan 
+jugar play a 0 0 0 1 u ue jug jueg juego juegas juega jugamos juegan
+caminar walk a 0 1 camin camino caminas camina caminamos caminan
+ser be(doctor) e 0 0 0 0 soy eres es somos son
+ir go i 0 0 0 0 voy vas va vamos van
+estar be(place) a 0 0 0 0 estoy estás está estamos están 

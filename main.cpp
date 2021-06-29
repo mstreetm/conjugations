@@ -4,6 +4,7 @@
 #include <stdlib.h>//rand, srand
 #include <time.h>//time for random seeding
 #include <cctype>//upper and lowercase things
+#include <Windows.h>// SetConsoleOutputCP, SetConsoleInputCP
 
 using namespace std;
 
@@ -12,14 +13,25 @@ int numVerbs = 0;
 
 void verbsFromFile();
 void promptVerb();
+void newVerb();
 
 string sanitizeInput(string input);
 
 int main(){
+  SetConsoleOutputCP(1252);
+  SetConsoleCP(1252);
   srand(time(NULL));
   verbsFromFile();
-  promptVerb();
+  //newVerb();
+  //promptVerb();
   return 0;
+}
+
+void newVerb(){
+  Verb nVerb;
+  nVerb.setVerb();
+  verbList.push_back(nVerb);
+  numVerbs++;
 }
 
 void verbsFromFile(){

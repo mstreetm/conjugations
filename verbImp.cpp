@@ -52,6 +52,7 @@ void Verb::setVerb(){
   setBooleans();
   setStem();
   setPresentConjugations();
+  outputVerb();
 }
 
 void Verb::getVerb(){
@@ -86,7 +87,9 @@ void Verb::outputVerb(){
       fout << presentStemChange[1] << " ";
     }
   }
-  fout << stem << " ";
+  if(isPresentRegular || isYoGo || isPresentStemChanger){
+    fout << stem << " ";
+  }
   if(isPresentStemChanger){
     fout << presentStemChangeStem << " ";
   }
@@ -110,7 +113,9 @@ void Verb::inputVerb(){
       fin >> presentStemChange[1];
     }
   }
-  fin >> stem;
+  if(isPresentRegular || isYoGo || isPresentStemChanger){
+    fin >> stem;
+  }
   if(isPresentStemChanger){
     fin >> presentStemChangeStem;
   }
@@ -262,7 +267,7 @@ bool Verb::booleanInput(string key){
 }
 
 void Verb::setStem(){
-  if(isPresentRegular || isYoGo || isPresentStemChanger){
+  if(isPresentRegular || isYoGo || isPresentStemChanger){// else stem is not needed
     stem = infinitive;
     stem.pop_back();
     stem.pop_back();
