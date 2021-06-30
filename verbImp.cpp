@@ -12,7 +12,7 @@ string Verb::verbFile = "verbs.txt";
 ifstream Verb::fin(verbFile);
 ofstream Verb::fout(verbFile, ios::app);
 
-string Verb::validTypes[3] = {"ar", "er", "ir"};
+string Verb::validTypes[4] = {"ar", "er", "ir", "ír"};
 
 map<string, string> Verb::standardText = {
   {"isPresentRegular", "Is the verb regular in the present tense: "},
@@ -36,12 +36,20 @@ Verb::ConjRules Verb::endings = {
   .present = {
     .ar = {"o", "as", "a", "amos", "an"},
     .er = {"o", "es", "e", "emos", "en"},
-    .ir = {"o", "es", "e", "imos", "en"}
+    .ir = {"o", "es", "e", "imos", "en"},
+    .Ir = {"o", "es", "e", "ímos", "en"}//I think this one is correct, might not be though
+  },
+  .preterite = {
+    .ar = {"é", "aste", "ó", "amos", "aron"},
+    .erir = {"í", "iste", "ió", "imos", "ieron"},
+    .Ir = {"í", "íste", "ió", "ímos", "ieron"},//also not 100% sure on this one
+    .stemChange = {"e", "iste", "o", "imos", "ieron"},
+    .endingChange = {"", "", "yó", "", "yeron"}// so only used on proper forms
   }
 };
 
 Verb::Pronouns Verb::pronouns = {
-  .spanish = {"yo", "tu", "el/ella/usted", "nosotros", "ellos/ellas"},
+  .spanish = {"yo", "tu", "el/ella/usted", "nosotros", "ellos/ellas/ustedes"},
   .english = {"i", "you", "he/she", "we", "they"}
 };
 
@@ -181,6 +189,9 @@ void Verb::setVerbType(){
   for(auto vType : validTypes){
     if(sType == vType){
       type = sType[0];
+      if(vType == "ír"){
+        type = 'I';
+      }
       return;
     }
   }
@@ -343,15 +354,53 @@ void Verb::setPresentConjugations(){
       case 'i':
         currentConjugation += endings.present.ir[i];
         break;
+      case 'I':
+        currentConjugation += endings.present.Ir[i];
+        break;
     }
     presentCongugations[i] = currentConjugation;
   }
 }
 
-std::string Verb::getInfinitive(){
+string Verb::getInfinitive(){
   return infinitive;
 };
 
-std::string Verb::getPresentConjugation(int conNum){
+string Verb::getPresentConjugation(int conNum){
   return presentCongugations[conNum];
+}
+
+void Verb::setPreteriteSpellChanges(){
+  string ending3 = getEnding(3);
+  if(type == 'a'){//for isPreteriteSpellChange
+    switch(stem.back()){
+      case 'c':
+        preteriteSpellChangeStem = stem;
+        preteriteSpellChangeStem.pop_back();
+        preteriteSpellChangeStem += "qu";
+        isPreteriteSpellChange = true;
+        break;
+      case 'g':
+        preteriteSpellChangeStem = stem;
+        preteriteSpellChangeStem += "u";
+        isPreteriteSpellChange = true;
+        break;
+      case 'z':
+        preteriteSpellChangeStem = stem;
+        preteriteSpellChangeStem.pop_back();
+        preteriteSpellChangeStem += "c";
+        isPreteriteSpellChange = true;
+        break;
+    }
+  }else if((ending3 == "eer") || (ending3 == "oer") || (ending3 == "oír") || (ending3 == "uir") || (getEnding(4) == "caer")){
+      isPreteriteEndingChange = true;
+  }
+}
+
+string Verb::getEnding(int n){
+  string ending = "";
+  for(int i = infinitive.length()-1; i >= infinitive.length()-n; i--){
+    ending = infinitive[i] + ending;
+  }
+  return ending;
 }

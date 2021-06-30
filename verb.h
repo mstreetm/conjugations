@@ -33,15 +33,24 @@ class Verb{
         std::string ar[5];
         std::string er[5];
         std::string ir[5];
+        std::string Ir[5]; //for accent i(í)
+      };
+      struct PreteriteTense{
+        std::string ar[5];
+        std::string erir[5];
+        std::string Ir[5];//for accent i(í)
+        std::string stemChange[5];
+        std::string endingChange[5];
       };
       PresentTense present;
+      PreteriteTense preterite;
     };
 
     static std::string verbFile;// the file to input/output the verbs to
 
     static std::ofstream fout;//the file output;
 
-    static std::string validTypes[3];// valid types of verb ex. "ar"
+    static std::string validTypes[4];// valid types of verb ex. "ar"
     static std::map<std::string, std::string> standardText;// the standard prompt text for setVerb();
     static std::map<std::string, std::string> helpText;// the help text for setVerb();
     static std::string trueInputs[3];// strings that should evaluate as true (for booleans)
@@ -60,6 +69,9 @@ class Verb{
     std::string stem;// the infinitive without the last 2(or 4 for reflexive) letters
     std::string presentStemChangeStem;// the above with the stem change
     std::string presentCongugations[5];// the spanish, present tense conjugations of the verb
+    bool isPreteriteSpellChange;//-car, -gar, -zar
+    bool isPreteriteEndingChange;//-caer, -eer, -oer, -oír, -uir
+    std::string preteriteSpellChangeStem;//the stem to use for spelling changes(A)
 
     void setVerbType();// sets the type ex "ar"(sets 'a') of the verb and sets isReflexive
     void setInfinitive(char tag = ' ', std::string inf = "");// prompts the user for the verb infinitive, validates it, and re-prompts if nesecary
@@ -69,9 +81,11 @@ class Verb{
     void setPresentStemChangeStem();// sets the presentStemChangeStem if nesecary
     void setEnglishInfinitive();// sets the english meaning ex "eat" for comer not to eat, the to would be removed;
     void setPresentConjugations();// sets the present tense conjugations for the verb
+    void setPreteriteSpellChanges();
 
     void verbSetup();// used for constructors, sets most properties to "" or false, while setting isPresentRegular to true;
 
     std::string sanitizeInput(std::string input);// takes in a string, and outputs it with all lowercase letters
+    std::string getEnding(int n);//gets the last n letters of the infinitive
     bool booleanInput(std::string key);//takes a map key and prompts the user for information about one of the boolean properties, gives help if needed.
 };
