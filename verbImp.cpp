@@ -178,7 +178,7 @@ void Verb::inputVerb(){
 Verb::Verb(string inf){
   verbSetup();
   setVerbType();
-  setInfinititive('i', inf);
+  setInfinitive('i', inf);
 }
 
 Verb::Verb(){
@@ -383,19 +383,20 @@ void Verb::setEnglishInfinitive(){
 void Verb::setPresentConjugations(){
   if(!isPresentRegular && !isPresentStemChanger && !isYoGo){// if the verb is completley irregular
     for(int i = 0; i < 5; i++){
-      cout << "enter the " << pronouns.spanish[i] << " conjugation of " << infinitive << ": ";
+      cout << "enter the present" << pronouns.spanish[i] << " conjugation of " << infinitive << ": ";
       cin >> presentCongugations[i];
+      presentCongugations[i] = sanitizeInput(presentCongugations[i]);
     }
     return;
   }
   for(int i = 0; i < 5; i++){// if the verb is somewhat regular
     string currentConjugation = "";
-    if(isPresentStemChanger && (i != 3)){// if the verb is a present stem changer
+    if(isPresentStemChanger && (i != 3)){// if the verb is a present stem changer and its not nosotros
       currentConjugation = presentStemChangeStem;
     }else{// if not
       currentConjugation = presentStem;
     }
-    if(isYoGo && (i == 0)){// if the verb is a yo-go
+    if(isYoGo && (i == 0)){// if the verb is a yo-go and its yo
       presentCongugations[i] = currentConjugation + "go";
       cout << presentCongugations[i] << ": ";
       bool correct = booleanInput("correctYoGo");
@@ -488,5 +489,44 @@ void Verb::setPreteriteStem(){
 }
 
 void Verb::setPreteriteConjugations(){
-  //Impliment
+  if(!isPreteriteRegular && !isPreteriteStemChange){// if the verb is completley irregular
+    for(int i = 0; i < 5; i++){
+      cout << "enter the preterite" << pronouns.spanish[i] << " conjugation of " << infinitive << ": ";
+      cin >> presentCongugations[i];
+      presentCongugations[i] = sanitizeInput(presentCongugations[i]);
+    }
+    return;
+    for(int i = 0; i < 5; i++){// if the verb is somewhat regular
+      string currentConjugation = "";
+      if(isPreteriteSpellChange && (i == 0)){// if the verb is a preterite spell changer and its yo
+        currentConjugation = preteriteSpellChangeStem;
+      }else{// if not
+        currentConjugation = preteriteStem;
+      }
+      if(isPreteriteStemChange){
+        if(preteriteStem.back() == 'j'){
+          currentConjugation += endings.preterite.stemChangeJ[i];
+          break;
+        }else{
+          currentConjugation += endings.preterite.stemChange[i];
+        }
+      }else if(isPreteriteEndingChange){
+        currentConjugation += endings.preterite.endingChange[i];
+      }else{
+        switch(type){//if not or a different form
+          case 'a':
+            currentConjugation += endings.preterite.ar[i];
+            break;
+          case 'e':
+          case 'i':
+            currentConjugation += endings.preterite.erir[i];
+            break;
+          case 'I':
+            currentConjugation += endings.preterite.Ir[i];
+            break;
+        }
+      }
+      presentCongugations[i] = currentConjugation;
+    }
+  }
 }
