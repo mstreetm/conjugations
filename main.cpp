@@ -23,6 +23,9 @@ int main(){
   srand(time(NULL));
   verbsFromFile();
   //newVerb();
+  verbList[0].getVerb();
+  cout << "\n";
+  verbList[1].getVerb();
   //promptVerb();
   return 0;
 }

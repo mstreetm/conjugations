@@ -5,18 +5,19 @@ class Verb{
   public:
     static std::ifstream fin;//the file input
 
-    // constructors, all call vrebSteup()
+    // constructors, all call verbSteup()
     Verb(std::string inf);// constructor including the verb infinitive
     Verb(); //default constructor
     Verb(const Verb& a);// for copying
 
     void setVerb();// sets verb properties by user prompt for the most part, also calls outputVerb
-    void getVerb();// prints verb properties and labels(only for present b/c not using. delete if not updated by 7/8)
+    void getVerb();// prints verb properties and labels
     void outputVerb();// outputs the verb to the text file
     void inputVerb();//inputs a verb from the text file
 
     std::string getInfinitive();// returns the verb infinitive
     std::string getPresentConjugation(int conNum);// returns the specified present conjugation
+    std::string getPreteriteConjugation(int conNum);// returns the specified preterite conjugation
 
     //for pronouns ex. yo, I, etc.
     struct Pronouns{
@@ -33,12 +34,12 @@ class Verb{
         std::string ar[5];
         std::string er[5];
         std::string ir[5];
-        std::string Ir[5]; //for accent i(Ã­)
+        std::string Ir[5]; //for accent i(í)
       };
       struct PreteriteTense{
         std::string ar[5];
         std::string erir[5];
-        std::string Ir[5];//for accent i(Ã­)
+        std::string Ir[5];//for accent i(í­)
         std::string stemChange[5];
         std::string stemChangeJ[5];//ends in j
         std::string endingChange[5];
@@ -71,14 +72,15 @@ class Verb{
     std::string presentStemChange[2];// what is the change in the form "e ie"
     std::string presentStem;// the infinitive without the last 2(or 4 for reflexive) letters
     std::string presentStemChangeStem;// the above with the stem change
-    std::string presentCongugations[5];// the spanish, present tense conjugations of the verb
+    std::string presentConjugations[5];// the spanish, present tense conjugations of the verb
 
     //PRETERITE
     bool isPreteriteRegular;//is the verb regular in the preterite tense
-    bool isPreteriteStemChange;//is the verb a stem changer in the preterite tense
+    bool isPreteriteStemChanger;//is the verb a stem changer in the preterite tense
     std::string preteriteStem;//the stem to use for preterite tense
-    bool isPreteriteSpellChange;//-car, -gar, -zar
-    bool isPreteriteEndingChange;//-caer, -eer, -oer, -oÃ­r, -uir
+    bool isPreteriteSpellChanger;//-car, -gar, -zar
+    bool isPreteriteEndingChanger;//-caer, -eer, -oer, -oí­r, -uir
+    bool isPreteriteSometimesStemChanger; // is a present stem changer of e->i or o->u
     std::string preteriteSpellChangeStem;//the stem to use for spelling changes
     std::string preteriteConjugations[5];//the spanish preterite tense conjugations of the verb
 
@@ -91,7 +93,7 @@ class Verb{
     void setEnglishInfinitive();// sets the english meaning ex "eat" for comer not to eat, the to would be removed;
     void setPresentConjugations();// sets the present tense conjugations for the verb
     void setPreteriteBooleans();//sets the top two preterite bools
-    void setPreteriteSpellChanges();//sets the isPreteriteSpellChange and preteriteSpellChangeStem or isPreteriteEndingChange
+    void setPreteriteSpellChanges();//sets the isPreteriteSpellChange and preteriteSpellChangeStem or isPreteriteEndingChange, as well as isPreteriteSometimesStemChanger
     void setPreteriteStem();//sets the preteriteStem
     void setPreteriteConjugations();//sets the conjugations for the preterite tense
 
