@@ -18,15 +18,19 @@ map<string, string> Verb::standardText = {
   {"isPresentRegular", "Is the verb regular in the present tense: "},
   {"isYoGo", "Is the verb a yo-go verb: "},
   {"isPresentStemChanger", "Does the verb undergo a stem change in the present tense: "},
-  {"correctYoGo", "Is this the correct yo form of the verb: "}
+  {"correctYoGo", "Is this the correct yo form of the verb: "},
+  {"isPreteriteRegular", "Is the verb regular in the preterite tense: "},
+  {"isPreteriteStemChange", "Does the verb have a stem change in the preterite tense: "}
 };
 
 map<string, string> Verb::helpText = {
-  {"isPresentRegular", "Is the verb conjugated regularly in the present tense?\n"},
+  {"isPresentRegular", "Is the verb conjugated regularly in the present tense? (answer no for stem change or yo-go)\n"},
   {"genericBool", "Please enter true, yes, false, no, or help.\n"},
   {"isYoGo", "Does the present tense yo form of the verb end in \"go\"?\n"},
-  {"isPresentStemChanger", "Does the verb stem change for all of the present tense conjugations(other than nosotros)?\n"},
-  {"correctYoGo", "Should the yo form of this verb have the third-to-last letter removed?\n"}
+  {"isPresentStemChanger", "Does the verb-stem change for all of the present tense conjugations(other than nosotros)?\n"},
+  {"correctYoGo", "Should the yo form of this verb have the third-to-last letter removed?\n"},
+  {"isPreteriteRegular", "Is the verb conjugated regularly in the preterite tense? (answer no for stem change)\n"},
+  {"isPreteriteStemChange", "Does the verb-stem change for all of the preterite tense conjugations?\n"}
 };
 
 string Verb::trueInputs[3] = {"true", "yes", "1"};
@@ -44,7 +48,8 @@ Verb::ConjRules Verb::endings = {
     .erir = {"í", "iste", "ió", "imos", "ieron"},
     .Ir = {"í", "íste", "ió", "ímos", "ieron"},//also not 100% sure on this one
     .stemChange = {"e", "iste", "o", "imos", "ieron"},
-    .endingChange = {"", "", "yó", "", "yeron"}// so only used on proper forms
+    .stemChangeJ = {"e", "iste", "o", "imos", "eron"},
+    .endingChange = {"", "", "yó", "", "yeron"}// so only can be used on proper forms
   }
 };
 
@@ -57,13 +62,24 @@ void Verb::setVerb(){
   setInfinitive();
   setEnglishInfinitive();
   setVerbType();
-  setBooleans();
-  setPresentStem();
-  setPresentConjugations();
-  outputVerb();
+  setPresentTense();
+  setPreteriteTense();
 }
 
-void Verb::getVerb(){
+void Verb::setPresentTense(){
+  setPresentBooleans();
+  setPresentStem();
+  setPresentConjugations();
+}
+
+void Verb::setPreteriteTense(){
+  setPreteriteBooleans();
+  setPreteriteStem();
+  setPreteriteConjugations();
+}
+
+
+void Verb::getVerb(){//DISUSED 7/8
   cout << "infinitive: " << infinitive << "\n";
   cout << "englishInfinitive: " << englishInfinitive << "\n";
   cout << "type: " << type << "\n";
@@ -104,10 +120,24 @@ void Verb::outputVerb(){
   for(auto c : presentCongugations){
     fout << c << " ";
   }
+  fout << isPreteriteRegular << " ";
+  fout << isPreteriteStemChange << " ";
+  if(isPreteriteRegular || isPreteriteStemChange){
+    fout << preteriteStem << " ";
+  }
+  fout << isPreteriteSpellChange << " ";
+  fout << isPreteriteEndingChange << " ";
+  if(isPreteriteSpellChange){
+    fout << preteriteSpellChangeStem << " ";
+  }
+  for(auto c : preteriteConjugations){
+    fout << c << " ";
+  }
   fout << "\n";
 }
 
 void Verb::inputVerb(){
+  verbSetup();
   fin >> infinitive;
   fin >> englishInfinitive;
   fin >> type;
@@ -130,16 +160,28 @@ void Verb::inputVerb(){
   for(auto &c : presentCongugations){
     fin >> c;
   }
+  fin >> isPreteriteRegular;
+  fin >> isPreteriteStemChange;
+  if(isPreteriteRegular || isPreteriteStemChange){
+    fin >> preteriteStem;
+  }
+  fin >> isPreteriteSpellChange;
+  fin >> isPreteriteEndingChange;
+  if(isPreteriteSpellChange){
+    fin >> preteriteSpellChangeStem;
+  }
+  for(auto &c : preteriteConjugations){
+    fin >> c;
+  }
 }
 
 Verb::Verb(string inf){
-  infinitive = inf;
-  setVerbType();
   verbSetup();
+  setVerbType();
+  setInfinititive('i', inf);
 }
 
 Verb::Verb(){
-  infinitive = "";
   verbSetup();
 }
 
@@ -158,10 +200,21 @@ Verb::Verb(const Verb& a){
   for(int i = 0; i < 5; i++){
     presentCongugations[i] = a.presentCongugations[i];
   }
+  isPreteriteRegular = a.isPresentRegular;
+  isPreteriteStemChange = a.isPreteriteStemChange;
+  preteriteStem = a.preteriteStem;
+  isPreteriteSpellChange = a.isPreteriteSpellChange;
+  isPreteriteEndingChange = a.isPreteriteEndingChange;
+  preteriteSpellChangeStem = a.preteriteSpellChangeStem;
+  for(int i = 0; i < 5; i++){
+    preteriteConjugations[i] = a.preteriteConjugations[1];
+  }
 }
 
 void Verb::verbSetup(){
+  infinitive = "";
   englishInfinitive = "";
+  type = ' ';
   isReflexive = false;
   isPresentRegular = true;
   isYoGo = false;
@@ -171,6 +224,15 @@ void Verb::verbSetup(){
   presentStem = "";
   presentStemChangeStem = "";
   for(auto &c : presentCongugations){
+    c = "";
+  }
+  isPreteriteRegular = true;
+  isPreteriteStemChange = false;
+  preteriteStem = "";
+  isPreteriteSpellChange = false;
+  isPreteriteEndingChange = false;
+  preteriteSpellChangeStem = "";
+  for(auto &c : preteriteConjugations){
     c = "";
   }
 }
@@ -238,7 +300,7 @@ void Verb::setInfinitive(char tag, string inf){
   infinitive = sanitizeInput(infinitive);
 }
 
-void Verb::setBooleans(){
+void Verb::setPresentBooleans(){
   isPresentRegular = booleanInput("isPresentRegular");
   if(!isPresentRegular){
     isYoGo = booleanInput("isYoGo");
@@ -403,4 +465,28 @@ string Verb::getEnding(int n){
     ending = infinitive[i] + ending;
   }
   return ending;
+}
+
+void Verb::setPreteriteBooleans(){
+  isPreteriteRegular = booleanInput("isPreteriteRegular");
+  if(!isPreteriteRegular){
+    isPreteriteStemChange = booleanInput("isPreteriteStemChange");
+  }
+}
+
+void Verb::setPreteriteStem(){
+  if(isPreteriteRegular){
+    preteriteStem = presentStem;//ASSUMES that there are no verbs irr. in the present and reg. in the preterite! change if needed(stem generation or alwaus generate present stem)
+  }else if(isPreteriteStemChange){
+    cout << "Enter the preterite stem change: ";
+    cin >> preteriteStem;
+    preteriteStem = sanitizeInput(preteriteStem);
+  }else{
+    return;
+  }
+  setPreteriteSpellChanges();
+}
+
+void Verb::setPreteriteConjugations(){
+  //Impliment
 }
