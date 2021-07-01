@@ -58,7 +58,7 @@ void Verb::setVerb(){
   setEnglishInfinitive();
   setVerbType();
   setBooleans();
-  setStem();
+  setPresentStem();
   setPresentConjugations();
   outputVerb();
 }
@@ -72,7 +72,7 @@ void Verb::getVerb(){
   cout << "isYoGo: " << isYoGo << "\n";
   cout << "isPresentStemChanger: " << isPresentStemChanger << "\n";
   cout << "presentStemChange: " << presentStemChange[0] << " " << presentStemChange[1] << "\n";
-  cout << "stem: " << stem << "\n";
+  cout << "presentStem: " << presentStem << "\n";
   cout << "presentStemChangeStem: " << presentStemChangeStem << "\n";
   cout << "presentCongugations:";
   for(auto c : presentCongugations){
@@ -96,7 +96,7 @@ void Verb::outputVerb(){
     }
   }
   if(isPresentRegular || isYoGo || isPresentStemChanger){
-    fout << stem << " ";
+    fout << presentStem << " ";
   }
   if(isPresentStemChanger){
     fout << presentStemChangeStem << " ";
@@ -122,7 +122,7 @@ void Verb::inputVerb(){
     }
   }
   if(isPresentRegular || isYoGo || isPresentStemChanger){
-    fin >> stem;
+    fin >> presentStem;
   }
   if(isPresentStemChanger){
     fin >> presentStemChangeStem;
@@ -153,7 +153,7 @@ Verb::Verb(const Verb& a){
   isPresentStemChanger = a.isPresentStemChanger;
   presentStemChange[0] = a.presentStemChange[0];
   presentStemChange[1] = a.presentStemChange[1];
-  stem = a.stem;
+  presentStem = a.presentStem;
   presentStemChangeStem = a.presentStemChangeStem;
   for(int i = 0; i < 5; i++){
     presentCongugations[i] = a.presentCongugations[i];
@@ -168,7 +168,7 @@ void Verb::verbSetup(){
   isPresentStemChanger = false;
   presentStemChange[0] = "";
   presentStemChange[1] = "";
-  stem = "";
+  presentStem = "";
   presentStemChangeStem = "";
   for(auto &c : presentCongugations){
     c = "";
@@ -277,14 +277,14 @@ bool Verb::booleanInput(string key){
   return booleanInput(key);
 }
 
-void Verb::setStem(){
-  if(isPresentRegular || isYoGo || isPresentStemChanger){// else stem is not needed
-    stem = infinitive;
-    stem.pop_back();
-    stem.pop_back();
-    if(isReflexive){// actually remove the stem(first removed the "se")
-      stem.pop_back();
-      stem.pop_back();
+void Verb::setPresentStem(){
+  if(isPresentRegular || isYoGo || isPresentStemChanger){// else presentStem is not needed
+    presentStem = infinitive;
+    presentStem.pop_back();
+    presentStem.pop_back();
+    if(isReflexive){// actually remove the ending(first removed the "se")
+      presentStem.pop_back();
+      presentStem.pop_back();
     }
     setPresentStemChangeStem();
   }
@@ -292,15 +292,15 @@ void Verb::setStem(){
 
 void Verb::setPresentStemChangeStem(){
   if(isPresentStemChanger){
-    int len = stem.length();
+    int len = presentStem.length();
     for(int i = len-1; i >= 0; i--){//iterates back to front to find the last spot with the thing to change
-      if(stem[i] == presentStemChange[0][0]){
+      if(presentStem[i] == presentStemChange[0][0]){
         for(int j = 0; j < i; j++){
-          presentStemChangeStem += stem[j];//puts the first part of the PSCS in
+          presentStemChangeStem += presentStem[j];//puts the first part of the PSCS in
         }
         presentStemChangeStem += presentStemChange[1];//puts in the stem change
         for(int j = i+1; j < len; j++){
-          presentStemChangeStem += stem[j];//fills in the end of the PSCS
+          presentStemChangeStem += presentStem[j];//fills in the end of the PSCS
         }
         break;
       }
@@ -328,10 +328,10 @@ void Verb::setPresentConjugations(){
   }
   for(int i = 0; i < 5; i++){// if the verb is somewhat regular
     string currentConjugation = "";
-    if(isPresentStemChanger && (i != 3)){// if the verb is a stem changer
+    if(isPresentStemChanger && (i != 3)){// if the verb is a present stem changer
       currentConjugation = presentStemChangeStem;
     }else{// if not
-      currentConjugation = stem;
+      currentConjugation = presentStem;
     }
     if(isYoGo && (i == 0)){// if the verb is a yo-go
       presentCongugations[i] = currentConjugation + "go";
@@ -373,20 +373,20 @@ string Verb::getPresentConjugation(int conNum){
 void Verb::setPreteriteSpellChanges(){
   string ending3 = getEnding(3);
   if(type == 'a'){//for isPreteriteSpellChange
-    switch(stem.back()){
+    switch(preteriteStem.back()){
       case 'c':
-        preteriteSpellChangeStem = stem;
+        preteriteSpellChangeStem = preteriteStem;
         preteriteSpellChangeStem.pop_back();
         preteriteSpellChangeStem += "qu";
         isPreteriteSpellChange = true;
         break;
       case 'g':
-        preteriteSpellChangeStem = stem;
+        preteriteSpellChangeStem = preteriteStem;
         preteriteSpellChangeStem += "u";
         isPreteriteSpellChange = true;
         break;
       case 'z':
-        preteriteSpellChangeStem = stem;
+        preteriteSpellChangeStem = preteriteStem;
         preteriteSpellChangeStem.pop_back();
         preteriteSpellChangeStem += "c";
         isPreteriteSpellChange = true;

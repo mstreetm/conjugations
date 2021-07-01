@@ -66,9 +66,10 @@ class Verb{
     bool isYoGo;// is the verb a yo-go verb
     bool isPresentStemChanger;// is the verb a stem changer in the present tense
     std::string presentStemChange[2];// what is the change in the form "e ie"
-    std::string stem;// the infinitive without the last 2(or 4 for reflexive) letters
+    std::string presentStem;// the infinitive without the last 2(or 4 for reflexive) letters
     std::string presentStemChangeStem;// the above with the stem change
     std::string presentCongugations[5];// the spanish, present tense conjugations of the verb
+    std::string preteriteStem;//the stem to use for preterite tense
     bool isPreteriteSpellChange;//-car, -gar, -zar
     bool isPreteriteEndingChange;//-caer, -eer, -oer, -oír, -uir
     std::string preteriteSpellChangeStem;//the stem to use for spelling changes(A)
@@ -77,7 +78,7 @@ class Verb{
     void setInfinitive(char tag = ' ', std::string inf = "");// prompts the user for the verb infinitive, validates it, and re-prompts if nesecary
     void setBooleans();// sets the boolean type properties by prompting the user
     void setPresentStemChange();// sets the presentStemChange if the verb is a present stem changer by prompting the user
-    void setStem();// sets the stem
+    void setPresentStem();// sets the present stem
     void setPresentStemChangeStem();// sets the presentStemChangeStem if nesecary
     void setEnglishInfinitive();// sets the english meaning ex "eat" for comer not to eat, the to would be removed;
     void setPresentConjugations();// sets the present tense conjugations for the verb
