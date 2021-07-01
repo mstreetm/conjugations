@@ -23,10 +23,7 @@ int main(){
   srand(time(NULL));
   verbsFromFile();
   //newVerb();
-  verbList[0].getVerb();
-  cout << "\n";
-  verbList[1].getVerb();
-  //promptVerb();
+  promptVerb();
   return 0;
 }
 
@@ -49,23 +46,41 @@ void verbsFromFile(){
 }
 
 void promptVerb(){
+  int tense = rand() % Verb::numTenses;
+  string tenseName = Verb::tenseList[tense];
   int verb = rand() % numVerbs;
   int person = rand() % 5;
+  string personName = Verb::pronouns.spanish[person];
+  string correctAnswer = "";
+  switch(tense){
+    case 0:
+      correctAnswer = verbList[verb].getPresentConjugation(person);
+      break;
+    case 1:
+      correctAnswer = verbList[verb].getPreteriteConjugation(person);
+      break;
+  }
   string answer = "";
-  cout << "Enter the conjugation of " << verbList[verb].getInfinitive() << " for " << Verb::pronouns.spanish[person] << ": ";
+  cout << "Enter the conjugation of " << verbList[verb].getInfinitive() << " for " << personName << " in the " << tenseName << " tense: ";
   cin >> answer;
   answer = sanitizeInput(answer);
-  while(answer != verbList[verb].getPresentConjugation(person)){
+  int attempt = 1;
+  while(attempt < 5 && (answer != correctAnswer)){
     cout << "That is not correct. Please try again: ";
     cin >> answer;
     answer = sanitizeInput(answer);
     if(answer == "help"){
-      cout << "Enter the conjugation of " << verbList[verb].getInfinitive() << " for " << Verb::pronouns.spanish[person] << ": ";
+      cout << "Enter the conjugation of " << verbList[verb].getInfinitive() << " for " << personName << " in the " << tenseName << " tense: ";
       cin >> answer;
       answer = sanitizeInput(answer);
     }
+    attempt++;
   }
-  cout << "Correct! Try again? (y/n): ";
+  if(answer == correctAnswer){
+    cout << "Correct! Try again? (y/n): ";
+  }else{
+    cout << "That is not correct.  The correct answer was " << correctAnswer << ". Try again? (y/n): ";
+  }
   char ans;
   cin >> ans;
   while((ans != 'y') && (ans != 'n')){

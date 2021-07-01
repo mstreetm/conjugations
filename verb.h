@@ -19,6 +19,9 @@ class Verb{
     std::string getPresentConjugation(int conNum);// returns the specified present conjugation
     std::string getPreteriteConjugation(int conNum);// returns the specified preterite conjugation
 
+    static int numTenses;
+    static std::string tenseList[2];
+
     //for pronouns ex. yo, I, etc.
     struct Pronouns{
       std::string spanish[5];

@@ -12,6 +12,9 @@ string Verb::verbFile = "verbs.txt";
 ifstream Verb::fin(verbFile);
 ofstream Verb::fout(verbFile, ios::app);
 
+int Verb::numTenses = 2;
+string Verb::tenseList[2] = {"present", "preterite"};
+
 string Verb::validTypes[4] = {"ar", "er", "ir", "í­r"};
 
 map<string, string> Verb::standardText = {
@@ -400,7 +403,7 @@ void Verb::setEnglishInfinitive(){
 void Verb::setPresentConjugations(){
   if(!isPresentRegular && !isPresentStemChanger && !isYoGo){// if the verb is completley irregular
     for(int i = 0; i < 5; i++){
-      cout << "enter the present " << pronouns.spanish[i] << " conjugation of " << infinitive << ": ";
+      cout << "Enter the present " << pronouns.spanish[i] << " conjugation of " << infinitive << ": ";
       cin >> presentConjugations[i];
       presentConjugations[i] = sanitizeInput(presentConjugations[i]);
     }
@@ -516,7 +519,7 @@ void Verb::setPreteriteStem(){
 void Verb::setPreteriteConjugations(){
   if(!isPreteriteRegular && !isPreteriteStemChanger){// if the verb is completley irregular
     for(int i = 0; i < 5; i++){
-      cout << "enter the preterite " << pronouns.spanish[i] << " conjugation of " << infinitive << ": ";
+      cout << "Enter the preterite " << pronouns.spanish[i] << " conjugation of " << infinitive << ": ";
       cin >> preteriteConjugations[i];
       preteriteConjugations[i] = sanitizeInput(preteriteConjugations[i]);
     }
