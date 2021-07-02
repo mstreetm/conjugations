@@ -35,7 +35,7 @@ void newVerb(){
 }
 
 void verbsFromFile(){
-  while(!Verb::fin.eof()){
+  while(!Verb::endOfFileInput()){
     Verb b;
     b.inputVerb();
     verbList.push_back(b);
