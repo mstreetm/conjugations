@@ -32,8 +32,7 @@ class Verb{
 
     //getters
     std::string getInfinitive();// returns the verb infinitive
-    std::string getPresentConjugation(int conNum);// returns the specified present conjugation
-    std::string getPreteriteConjugation(int conNum);// returns the specified preterite conjugation
+    std::string getConjugation(std::string key, int num);//gets the specified conjugation
 
   private:
     static std::string validTypes[4];// valid types of verb ex. "ar"
@@ -44,13 +43,13 @@ class Verb{
         std::string ar[5];
         std::string er[5];
         std::string ir[5];
-        std::string Ir[5]; //for accent i(í)
+        std::string Ir[5]; //for accent i(ï¿½)
       };
       PresentTense present;
       struct PreteriteTense{
         std::string ar[5];
         std::string erir[5];
-        std::string Ir[5];//for accent i(í­)
+        std::string Ir[5];//for accent i(ï¿½ï¿½)
         std::string stemChange[5];
         std::string stemChangeJ[5];//ends in j
         std::string endingChange[5];
@@ -88,7 +87,7 @@ class Verb{
     bool isPreteriteStemChanger;//is the verb a stem changer in the preterite tense
     std::string preteriteStem;//the stem to use for preterite tense
     bool isPreteriteSpellChanger;//-car, -gar, -zar
-    bool isPreteriteEndingChanger;//-caer, -eer, -oer, -oí­r, -uir
+    bool isPreteriteEndingChanger;//-caer, -eer, -oer, -oï¿½ï¿½r, -uir
     bool isPreteriteSometimesStemChanger; // is a present stem changer of e->i or o->u
     std::string preteriteSpellChangeStem;//the stem to use for spelling changes
     std::string preteriteConjugations[5];//the spanish preterite tense conjugations of the verb

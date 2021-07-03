@@ -20,22 +20,22 @@ Verb::Pronouns Verb::pronouns = {
 };
 
 //private
-string Verb::validTypes[4] = {"ar", "er", "ir", "í­r"};
+string Verb::validTypes[4] = {"ar", "er", "ir", "ï¿½ï¿½r"};
 
 Verb::ConjRules Verb::endings = {
   .present = {
     .ar = {"o", "as", "a", "amos", "an"},
     .er = {"o", "es", "e", "emos", "en"},
     .ir = {"o", "es", "e", "imos", "en"},
-    .Ir = {"o", "es", "e", "í­mos", "en"}//I think this one is correct, might not be though
+    .Ir = {"o", "es", "e", "ï¿½ï¿½mos", "en"}//I think this one is correct, might not be though
   },
   .preterite = {
-    .ar = {"é", "aste", "ó", "amos", "aron"},
-    .erir = {"í­", "iste", "ió", "imos", "ieron"},
-    .Ir = {"í", "í­ste", "ió", "ímos", "ieron"},//also not 100% sure on this one
+    .ar = {"ï¿½", "aste", "ï¿½", "amos", "aron"},
+    .erir = {"ï¿½ï¿½", "iste", "iï¿½", "imos", "ieron"},
+    .Ir = {"ï¿½", "ï¿½ï¿½ste", "iï¿½", "ï¿½mos", "ieron"},//also not 100% sure on this one
     .stemChange = {"e", "iste", "o", "imos", "ieron"},
     .stemChangeJ = {"e", "iste", "o", "imos", "eron"},
-    .endingChange = {"", "", "yó", "", "yeron"}// so only can be used on proper forms
+    .endingChange = {"", "", "yï¿½", "", "yeron"}// so only can be used on proper forms
   }
 };
 
@@ -232,12 +232,14 @@ string Verb::getInfinitive(){
   return infinitive;
 };
 
-string Verb::getPresentConjugation(int conNum){
-  return presentConjugations[conNum];
-}
-
-string Verb::getPreteriteConjugation(int conNum){
-  return preteriteConjugations[conNum];
+string Verb::getConjugation(string key, int num){
+  if(key == tenseList[0]){
+    return presentConjugations[num];
+  }else if(key == tenseList[1]){
+    return preteriteConjugations[num];
+  }else{
+    return "Invalid key.";
+  }
 }
 
 //private verb property setters

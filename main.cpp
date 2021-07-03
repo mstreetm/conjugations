@@ -51,15 +51,7 @@ void promptVerb(){
   int verb = rand() % numVerbs;
   int person = rand() % 5;
   string personName = Verb::pronouns.spanish[person];
-  string correctAnswer = "";
-  switch(tense){
-    case 0:
-      correctAnswer = verbList[verb].getPresentConjugation(person);
-      break;
-    case 1:
-      correctAnswer = verbList[verb].getPreteriteConjugation(person);
-      break;
-  }
+  string correctAnswer = verbList[verb].getConjugation(tenseName, person);
   string answer = "";
   cout << "Enter the conjugation of " << verbList[verb].getInfinitive() << " for " << personName << " in the " << tenseName << " tense: ";
   cin >> answer;
