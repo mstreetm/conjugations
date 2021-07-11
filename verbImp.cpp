@@ -11,8 +11,8 @@ using namespace std;
 //public
 string Verb::verbFile = "verbs.txt";
 
-int Verb::numTenses = 2;
-string Verb::tenseList[2] = {"present", "preterite"};
+int Verb::numTenses = 3;
+string Verb::tenseList[3] = {"present", "preterite", "imperfect"};
 
 Verb::Pronouns Verb::pronouns = {
   .spanish = {"yo", "tu", "el/ella/usted", "nosotros", "ellos/ellas/ustedes"},
@@ -20,22 +20,26 @@ Verb::Pronouns Verb::pronouns = {
 };
 
 //private
-string Verb::validTypes[4] = {"ar", "er", "ir", "ï¿½ï¿½r"};
+string Verb::validTypes[4] = {"ar", "er", "ir", "ír"};
 
 Verb::ConjRules Verb::endings = {
   .present = {
     .ar = {"o", "as", "a", "amos", "an"},
     .er = {"o", "es", "e", "emos", "en"},
     .ir = {"o", "es", "e", "imos", "en"},
-    .Ir = {"o", "es", "e", "ï¿½ï¿½mos", "en"}//I think this one is correct, might not be though
+    .Ir = {"o", "es", "e", "ímos", "en"}//I think this one is correct, might not be though
   },
   .preterite = {
-    .ar = {"ï¿½", "aste", "ï¿½", "amos", "aron"},
-    .erir = {"ï¿½ï¿½", "iste", "iï¿½", "imos", "ieron"},
-    .Ir = {"ï¿½", "ï¿½ï¿½ste", "iï¿½", "ï¿½mos", "ieron"},//also not 100% sure on this one
+    .ar = {"é", "aste", "ó", "amos", "aron"},
+    .erir = {"í", "iste", "ió", "imos", "ieron"},
+    .Ir = {"í", "íste", "ió", "ímos", "ieron"},//also not 100% sure on this one
     .stemChange = {"e", "iste", "o", "imos", "ieron"},
     .stemChangeJ = {"e", "iste", "o", "imos", "eron"},
-    .endingChange = {"", "", "yï¿½", "", "yeron"}// so only can be used on proper forms
+    .endingChange = {"", "", "yó", "", "yeron"}// so only can be used on proper forms
+  },
+  .imperfect = {
+    .ar = {"aba", "abas", "aba", "ábamos", "aban"},
+    .erirIr = {"í­a", "ías", "í­a", "í­amos", "í­an"}
   }
 };
 
@@ -64,6 +68,8 @@ map<string, string> Verb::helpText = {
 string Verb::trueInputs[3] = {"true", "yes", "1"};
 string Verb::falseInputs[3] = {"false", "no", "0"};
 
+string Verb::imperfectIrregularVerbs[3] = {"ir", "ser", "ver"};
+
 //constructors
 Verb::Verb(){
   verbSetup();
@@ -80,6 +86,7 @@ Verb::Verb(const Verb& a){
   englishInfinitive = a.englishInfinitive;
   type = a.type;
   isReflexive = a.isReflexive;
+  stem = a.stem;
   isPresentRegular = a.isPresentRegular;
   isYoGo = a.isYoGo;
   isPresentStemChanger = a.isPresentStemChanger;
@@ -100,6 +107,10 @@ Verb::Verb(const Verb& a){
   for(int i = 0; i < 5; i++){
     preteriteConjugations[i] = a.preteriteConjugations[i];
   }
+  isImperfectRegular = a.isImperfectRegular;
+  for(int i = 0; i < 5; i++){
+    imperfectConjugations[i] = a.imperfectConjugations[i];
+  }
 }
 
 //public helpers
@@ -112,8 +123,10 @@ void Verb::setVerb(){
   setInfinitive();
   setEnglishInfinitive();
   setVerbType();
+  setStem();
   setPresentTense();
   setPreteriteTense();
+  setImperfectTense();
   outputVerb();
 }
 
@@ -123,6 +136,7 @@ void Verb::getVerb(){
   cout << "type: " << type << "\n";
   cout << "isReflexive: " << isReflexive << "\n";
   cout << "isPresentRegular: " << isPresentRegular << "\n";
+  cout << "stem: " << stem << "\n";
   cout << "isYoGo: " << isYoGo << "\n";
   cout << "isPresentStemChanger: " << isPresentStemChanger << "\n";
   cout << "presentStemChange: " << presentStemChange[0] << " " << presentStemChange[1] << "\n";
@@ -145,6 +159,12 @@ void Verb::getVerb(){
     cout << " " << preteriteConjugations[i];
   }
   cout << "\n";
+  cout << "isImperfectRegular: " << isImperfectRegular << "\n";
+  cout << "imperfectCongugations:";
+  for(int i = 0; i < 5; i++){
+    cout << " " << imperfectConjugations[i];
+  }
+  cout << "\n";
 }
 
 void Verb::outputVerb(){
@@ -152,6 +172,7 @@ void Verb::outputVerb(){
   fout << englishInfinitive << " ";
   fout << type << " ";
   fout << isReflexive << " ";
+  fout << stem << " ";
   fout << isPresentRegular << " ";
   if(!isPresentRegular){
     fout << isYoGo << " ";
@@ -184,6 +205,10 @@ void Verb::outputVerb(){
   for(auto c : preteriteConjugations){
     fout << c << " ";
   }
+  fout << isImperfectRegular << " ";
+  for(auto c : imperfectConjugations){
+    fout << c << " ";
+  }
   fout << "\n";
 }
 
@@ -193,6 +218,7 @@ void Verb::inputVerb(){
   fin >> englishInfinitive;
   fin >> type;
   fin >> isReflexive;
+  fin >> stem;
   fin >> isPresentRegular;
   if(!isPresentRegular){
     fin >> isYoGo;
@@ -225,6 +251,10 @@ void Verb::inputVerb(){
   for(auto &c : preteriteConjugations){
     fin >> c;
   }
+  fin >> isImperfectRegular;
+  for(auto &c : imperfectConjugations){
+    fin >> c;
+  }
 }
 
 //public getters
@@ -237,6 +267,8 @@ string Verb::getConjugation(string key, int num){
     return presentConjugations[num];
   }else if(key == tenseList[1]){
     return preteriteConjugations[num];
+  }else if(key == tenseList[2]){
+    return imperfectConjugations[num];
   }else{
     return "Invalid key.";
   }
@@ -306,6 +338,16 @@ void Verb::setVerbType(){
   setVerbType();
 }
 
+void Verb::setStem(){
+  stem = infinitive;
+  stem.pop_back();
+  stem.pop_back();
+  if(isReflexive){// actually remove the ending(first removed the "se")
+    stem.pop_back();
+    stem.pop_back();
+  }
+}
+
 //PRESENT
 void Verb::setPresentBooleans(){
   isPresentRegular = booleanInput("isPresentRegular");
@@ -325,13 +367,7 @@ void Verb::setPresentStemChange(){
 
 void Verb::setPresentStem(){
   if(isPresentRegular || isYoGo || isPresentStemChanger){// else presentStem is not needed
-    presentStem = infinitive;
-    presentStem.pop_back();
-    presentStem.pop_back();
-    if(isReflexive){// actually remove the ending(first removed the "se")
-      presentStem.pop_back();
-      presentStem.pop_back();
-    }
+    presentStem = stem;
     setPresentStemChangeStem();
   }
 }
@@ -440,7 +476,7 @@ void Verb::setPreteriteSpellChanges(){
 
 void Verb::setPreteriteStem(){
   if(isPreteriteRegular){
-    preteriteStem = presentStem;//ASSUMES that there are no verbs irr. in the present and reg. in the preterite! change if needed(stem generation or alwaus generate present stem)
+    preteriteStem = stem;
   }else if(isPreteriteStemChanger){
     cout << "Enter the preterite stem change: ";
     cin >> preteriteStem;
@@ -496,6 +532,41 @@ void Verb::setPreteriteConjugations(){
   }
 }
 
+//IMPERFECT
+void Verb::setIsImperfectRegular(){
+  for(auto v : imperfectIrregularVerbs){
+    if(infinitive == v){
+      isImperfectRegular = false;
+      break;
+    }else if(v == imperfectIrregularVerbs[2]){
+      isImperfectRegular = true;
+    }
+  }
+}
+
+void Verb::setImperfectConjugations(){
+  if(isImperfectRegular == false){//is irregular
+    for(int i = 0; i < 5; i++){
+      cout << "Enter the imperfect " << pronouns.spanish[i] << " conjugation of " << infinitive << ": ";
+      cin >> imperfectConjugations[i];
+      imperfectConjugations[i] = sanitizeInput(imperfectConjugations[i]);
+    }
+    return;
+  }
+  for(int i = 0; i < 5; i++){
+    switch(type){
+      case 'a':
+        imperfectConjugations[i] = stem + endings.imperfect.ar[i];
+        break;
+      case 'e':
+      case 'i':
+      case 'I':
+        imperfectConjugations[i] = stem + endings.imperfect.erirIr[i];
+        break;
+    }
+  }
+}
+
 //composite setters
 void Verb::setPresentTense(){
   setPresentBooleans();
@@ -509,11 +580,17 @@ void Verb::setPreteriteTense(){
   setPreteriteConjugations();
 }
 
+void Verb::setImperfectTense(){
+  setIsImperfectRegular();
+  setImperfectConjugations();
+}
+
 void Verb::verbSetup(){
   infinitive = "";
   englishInfinitive = "";
   type = ' ';
   isReflexive = false;
+  stem = "";
   isPresentRegular = true;
   isYoGo = false;
   isPresentStemChanger = false;
@@ -532,6 +609,10 @@ void Verb::verbSetup(){
   isPreteriteSometimesStemChanger = false;
   preteriteSpellChangeStem = "";
   for(auto &c : preteriteConjugations){
+    c = "";
+  }
+  isImperfectRegular = true;
+  for(auto &c : imperfectConjugations){
     c = "";
   }
 }

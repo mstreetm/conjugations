@@ -1,3 +1,1 @@
-caminar run a 0 1 camin camino caminas camina caminamos caminan 1 0 camin 0 0 0 caminé caminaste caminó caminamos caminaron
-estar be(place) a 0 0 0 0 estoy estás está estamos están 0 1 estuv 0 0 0 estuve estuviste estuvo estuvimos estuvieron
-correr run e 0 1 corr corro corres corre corremos corren 1 0 corr 0 0 0 corrí corriste corrió corrimos corrieron
+caminar walk a 0 camin 1 camin camino caminas camina caminamos caminan 1 0 camin 0 0 0 caminé caminaste caminó caminamos caminaron 1 caminaba caminabas caminaba caminábamos caminaban 

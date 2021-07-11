@@ -22,8 +22,8 @@ int main(){
   SetConsoleCP(1252);
   srand(time(NULL));
   verbsFromFile();
-  //newVerb();
-  promptVerb();
+  newVerb();
+  //promptVerb();
   return 0;
 }
 
