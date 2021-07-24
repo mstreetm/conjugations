@@ -4,10 +4,8 @@
 #include <stdlib.h>//rand, srand
 #include <time.h>//time for random seeding
 #include <cctype>//upper and lowercase things
-#ifdef WINDOWS
+#ifdef _WIN32
   #include <Windows.h>// SetConsoleOutputCP, SetConsoleInputCP
-  SetConsoleOutputCP(1252);
-  SetConsoleCP(1252);
 #endif
 
 using namespace std;
@@ -22,12 +20,16 @@ void newVerb();
 string sanitizeInput(string input);
 
 int main(){
+  #ifdef _WIN32
+    SetConsoleCP(1252);
+    SetConsoleOutputCP(1252);
+  #endif
   // SetConsoleOutputCP(1252);
   // SetConsoleCP(1252);
   srand(time(NULL));
   verbsFromFile();
-  newVerb();
-  //promptVerb();
+  //newVerb();
+  promptVerb();
   return 0;
 }
 
@@ -50,7 +52,7 @@ void verbsFromFile(){
 }
 
 void promptVerb(){
-  int tense = rand() % Verb::numTenses;
+  int tense = 1;//rand() % Verb::numTenses;
   string tenseName = Verb::tenseList[tense];
   int verb = rand() % numVerbs;
   int person = rand() % 5;
